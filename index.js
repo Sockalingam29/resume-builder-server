@@ -58,11 +58,9 @@ app.post('/login', async (req, res) => {
 app.post('/createData', async (req, res) => {
   const { userData } = req.body;
   console.log("UserData",userData)
-  const user = new DataModel(userData);
-  user.save()
+  const result = await DataModel.updateOne({username: userData.username}, { $set:userData }, { upsert: true })
   .then(() => {
-    res.send('UserData created successfully');
-    console.log("User",user)
+    res.send('UserData upserted successfully');
   })
   .catch(error => {
     console.error('Error creating user', error);
@@ -106,9 +104,9 @@ function authenticateToken(req, res, next) {
   });
 }
 
-app.get("/",async()=>{
-
+app.get("/",async(req,res)=>{
+  res.send("Hello World")
 })
 PORT = process.env.PORT || 3001;
-app.listen(process.env.PORT,()=>{
-    console.log("Server Running on Port 3001");});
+app.listen(PORT,()=>{
+    console.log("Server Running on Port"+PORT);});
