@@ -6,14 +6,18 @@ const jwt = require('jsonwebtoken');
 const cors=require("cors");
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt');
+const dotenv=require("dotenv");
+
 const app=express();
+dotenv.config();
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors({origin: true,credentials: true,}));
 app.use(express.json({limit: "50mb",extended:true}))
 app.use(express.urlencoded({limit: "50mb",extended:true}))
 
 try{
-  mongoose.connect("mongodb+srv://mathankumar:mathan81102@cluster0.srkk3l0.mongodb.net/?retryWrites=true&w=majority",{useNewUrlParser:true
+  mongoose.connect(process.env.DB_URL,{useNewUrlParser:true
 }).then(()=>{console.log("Database connection is established")});}
 catch(err){
 console.log(err,"Mongo Db not connected")}
@@ -105,6 +109,6 @@ function authenticateToken(req, res, next) {
 app.get("/",async()=>{
 
 })
-
-app.listen(3001,()=>{
+PORT = process.env.PORT || 3001;
+app.listen(process.env.PORT,()=>{
     console.log("Server Running on Port 3001");});
